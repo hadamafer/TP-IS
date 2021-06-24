@@ -18,7 +18,7 @@ script:
   -sonar-scanner -Dsonar.login=$SONAR_TOKEN -Dsonar.organization=hadamafer -Dsonar.projectKey=TP-IS -Dsonar.sources='./app' -X
   -docker build -t hadamafer/node-tp-is2 .
   -docker tag hadamafer/node-tp-is2
-registry.heroku.com/$HEROKU_APP_NAME/web
+  registry.heroku.com/$HEROKU_APP_NAME/web
 after_success:
   -npm run coveralls
 
