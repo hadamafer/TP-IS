@@ -19,10 +19,6 @@ script:
   - docker build -t hadamafer/node-tp-is2 .
   - docker tag hadamafer/node-tp-is2
    registry.heroku.com/$HEROKU_APP_NAME/web
-after_success:
-  - npm run coveralls
-
- 
 deploy:
   provider: script
   script:
