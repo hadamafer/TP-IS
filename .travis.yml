@@ -4,8 +4,12 @@ node_js: 12.21.0
 services:
   -docker 
 before_install:
+  # install heroku CLI
+  -wget -qO- https://toolbelt.heroku.com/install.sh | sh
   # login to docker registries (dockerhub + heroku)
-  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  -echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  -echo "$HEROKU_PASSWORD" | docker login -u "$HEROKU_USERNAME" --password-stdin registry.heroku.com
+
 jdk:
   - oraclejdk8
 addons:
@@ -13,7 +17,9 @@ addons:
 script:
   -npm run coverage
   -sonar-scanner -Dsonar.login=$SONAR_TOKEN -Dsonar.organization=hadamafer -Dsonar.projectKey=TP-IS -Dsonar.sources='./app' -X
-  -docker build -t unqpdes/todo-list-front .
+  -docker build -t hadamafer/node-tp-is2 .
+  -docker tag hadamafer/node-tp-is2
+registry.heroku.com/$HEROKU_APP_NAME/web
 after_success:
   -npm run coveralls
 
@@ -23,4 +29,7 @@ deploy:
   script:
     # push to dockerhub
     docker push hadamafer/node-tp-is2;
-  branch: master
+    docker push registry.heroku.com/$HEROKU_APP_NAME/web;
+    heroku container:release web --app $HEROKU_APP_NAME
+  on:
+    branch: master
