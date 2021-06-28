@@ -19,6 +19,8 @@ script:
   - docker build -t hadamafer/node-tp-is2 .
   - docker tag hadamafer/node-tp-is2
    registry.heroku.com/$HEROKU_APP_NAME/web
+notifications:
+  slack: trabajodeis:6HwETOfIMoIyvuYRW4GYPXQl
 deploy:
   provider: script
   script:
